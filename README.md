@@ -66,9 +66,18 @@ Dá pra abrir o `index.html` direto no Chrome/Edge, mas a página usa paths abso
 ### Opção 3 — Publicar
 
 Hospedagem recomendada:
-- **Vercel** (`vercel deploy` — zero config)
+- **Vercel** — basta conectar o repositório; o `vercel.json` já força modo estático (sem build)
 - **Netlify** (drag-and-drop a pasta)
 - **GitHub Pages** (branch `gh-pages` ou `main` + `/`)
+
+#### Vercel
+
+O `vercel.json` define `buildCommand: null`, `outputDirectory: "."` e `framework: null` para que a Vercel sirva os arquivos estáticos na raiz (`index.html` direto). Se aparecer "404 NOT_FOUND", confirme nas Configurações de Implantação que:
+
+- **Framework Preset:** Other
+- **Build Command:** vazio
+- **Output Directory:** `.`
+- **Install Command:** vazio
 
 ---
 

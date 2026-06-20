@@ -4,8 +4,7 @@
   "private": true,
   "description": "Landing page de alta conversao - QUANTEC PRO - tecnologia alema de biocomunicacao informacional.",
   "scripts": {
-    "start": "npx --yes serve -l 3000 .",
-    "dev": "npx --yes serve -l 3000 ."
+    "start": "npx --yes serve -l 3000 ."
   },
   "keywords": [
     "quantec",
