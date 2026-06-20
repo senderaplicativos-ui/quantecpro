@@ -19,3 +19,10 @@ Thumbs.db
 
 # Local references (briefing + raw images) — not needed in the repo
 referências/
+
+# Playwright test artifacts (keep the script, ignore captured shots)
+scripts/_shots/
+scripts/*.log
+
+# Dependencies installed for Playwright during testing
+node_modules/

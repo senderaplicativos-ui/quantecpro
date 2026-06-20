@@ -213,20 +213,26 @@
   const yearEl = document.getElementById('year');
   if (yearEl) yearEl.textContent = new Date().getFullYear();
 
-  /* ===== 7. STICKY CTA — hide near footer / end of page ===== */
+  /* ===== 7. STICKY CTA — show only after scrolling past hero,
+         hide near footer ===== */
   const stickyCta = document.getElementById('sticky-cta');
   if (stickyCta) {
-    const footer = document.querySelector('.site-footer');
-    const ctaFinal = document.querySelector('.section-cta-final');
+    let lastVisible = false;
     const updateSticky = () => {
-      const nearEnd = (() => {
-        const docH = document.documentElement.scrollHeight;
-        const scrolled = window.scrollY + window.innerHeight;
-        return scrolled >= docH - 200;
-      })();
-      stickyCta.style.opacity = nearEnd ? '0' : '1';
-      stickyCta.style.pointerEvents = nearEnd ? 'none' : 'auto';
-      stickyCta.style.transform = nearEnd ? 'translateY(20px)' : 'translateY(0)';
+      const hero = document.querySelector('.hero');
+      const heroH = hero ? hero.offsetHeight : 600;
+      // Show once user has scrolled past ~70% of the hero
+      const pastHero = window.scrollY > heroH * 0.7;
+      // Hide once near footer
+      const docH = document.documentElement.scrollHeight;
+      const scrolled = window.scrollY + window.innerHeight;
+      const nearEnd = scrolled >= docH - 240;
+      const visible = pastHero && !nearEnd;
+      if (visible === lastVisible) return;
+      lastVisible = visible;
+      stickyCta.style.opacity = visible ? '1' : '0';
+      stickyCta.style.pointerEvents = visible ? 'auto' : 'none';
+      stickyCta.style.transform = visible ? 'translateY(0)' : 'translateY(20px)';
     };
     window.addEventListener('scroll', updateSticky, { passive: true });
     window.addEventListener('resize', updateSticky);
