@@ -479,7 +479,7 @@
           const dist2 = dx * dx + dy * dy + 100; // evita divisão por 0
           const dist = Math.sqrt(dist2);
           // Força inversamente proporcional à distância
-          const force = 40000 / dist2;
+          const force = 800000 / dist2;
           attractX += (dx / dist) * force;
           attractY += (dy / dist) * force;
           attractStrength += force;
@@ -496,8 +496,13 @@
         p.vx = (p.vx + attractX * dt * 0.001 * p.mass + hx * homeForce) * drag;
         p.vy = (p.vy + attractY * dt * 0.001 * p.mass + hy * homeForce) * drag;
 
-        p.x += p.vx * dt * 0.1;
-        p.y += p.vy * dt * 0.1;
+        // Clamp de velocidade para não explodir
+        const maxV = 18;
+        const v = Math.sqrt(p.vx*p.vx + p.vy*p.vy);
+        if (v > maxV) { p.vx = p.vx/v*maxV; p.vy = p.vy/v*maxV; }
+
+        p.x += p.vx * dt * 0.18;
+        p.y += p.vy * dt * 0.18;
 
         // Twinkle
         p.twinklePhase += p.twinkleSpeed * ts;
