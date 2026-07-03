@@ -144,6 +144,154 @@
     else startCanvas();
   });
 
+  /* ===== 1b. DEVICE QUANTUM CANVAS (raios + halos + partículas) ===== */
+  const dcanvas = document.getElementById('device-canvas');
+  if (dcanvas) {
+    const dctx = dcanvas.getContext('2d');
+    let dw = 0, dh = 0, ddpr = Math.min(window.devicePixelRatio || 1, 2);
+    let particles = [];
+    let bolts = [];
+    let lastBolt = 0;
+
+    const COLORS = {
+      gold:  [214, 180, 117],
+      pink:  [231, 168, 168],
+      blue:  [79, 139, 255],
+    };
+
+    function resizeDeviceCanvas() {
+      const rect = dcanvas.parentElement.getBoundingClientRect();
+      dw = rect.width;
+      dh = rect.height;
+      dcanvas.width = dw * ddpr;
+      dcanvas.height = dh * ddpr;
+      dcanvas.style.width = dw + 'px';
+      dcanvas.style.height = dh + 'px';
+      dctx.setTransform(ddpr, 0, 0, ddpr, 0, 0);
+
+      particles = [];
+      const count = Math.floor((dw * dh) / 14000);
+      for (let i = 0; i < count; i++) {
+        particles.push({
+          angle: Math.random() * Math.PI * 2,
+          radius: 0.25 + Math.random() * 0.65, // fração do raio mínimo
+          speed: 0.0006 + Math.random() * 0.0012,
+          size: 0.6 + Math.random() * 1.8,
+          color: Math.random() < 0.6 ? 'gold' : (Math.random() < 0.5 ? 'pink' : 'blue'),
+          alpha: 0.3 + Math.random() * 0.6,
+        });
+      }
+    }
+
+    function makeBolt(cx, cy, maxR) {
+      const segs = 12;
+      const points = [{ x: cx, y: cy }];
+      let x = cx, y = cy;
+      for (let i = 0; i < segs; i++) {
+        const targetR = (i + 1) / segs * maxR;
+        const targetAngle = Math.random() * Math.PI * 2;
+        const tx = cx + Math.cos(targetAngle) * targetR;
+        const ty = cy + Math.sin(targetAngle) * targetR;
+        const mx = (x + tx) / 2 + (Math.random() - 0.5) * 40;
+        const my = (y + ty) / 2 + (Math.random() - 0.5) * 40;
+        points.push({ x: mx, y: my });
+        points.push({ x: tx, y: ty });
+        x = tx; y = ty;
+      }
+      return { points, life: 1 };
+    }
+
+    let draf = null, dlastTs = 0;
+    function drawDevice(ts) {
+      if (!dcanvas) return;
+      const dt = dlastTs ? Math.min(ts - dlastTs, 50) : 16;
+      dlastTs = ts;
+      const cx = dw / 2, cy = dh / 2;
+      const minR = Math.min(dw, dh) / 2;
+      dctx.clearRect(0, 0, dw, dh);
+
+      // Halo base pulsante
+      const pulse = 1 + Math.sin(ts * 0.0018) * 0.06;
+      const haloGrad = dctx.createRadialGradient(cx, cy, minR * 0.1, cx, cy, minR * 1.05);
+      haloGrad.addColorStop(0, 'rgba(214, 180, 117, 0.20)');
+      haloGrad.addColorStop(0.5, 'rgba(214, 180, 117, 0.06)');
+      haloGrad.addColorStop(1, 'rgba(214, 180, 117, 0)');
+      dctx.fillStyle = haloGrad;
+      dctx.beginPath();
+      dctx.arc(cx, cy, minR * 1.05 * pulse, 0, Math.PI * 2);
+      dctx.fill();
+
+      // Anel orbital sutil
+      dctx.strokeStyle = 'rgba(214, 180, 117, 0.18)';
+      dctx.lineWidth = 1;
+      dctx.beginPath();
+      dctx.arc(cx, cy, minR * 0.95, 0, Math.PI * 2);
+      dctx.stroke();
+
+      // Partículas orbitando
+      particles.forEach((p) => {
+        p.angle += p.speed * dt;
+        const r = p.radius * minR * 1.05;
+        const x = cx + Math.cos(p.angle) * r;
+        const y = cy + Math.sin(p.angle) * r;
+        const c = COLORS[p.color];
+        dctx.fillStyle = `rgba(${c[0]}, ${c[1]}, ${c[2]}, ${p.alpha})`;
+        dctx.shadowColor = `rgba(${c[0]}, ${c[1]}, ${c[2]}, 0.8)`;
+        dctx.shadowBlur = 8;
+        dctx.beginPath();
+        dctx.arc(x, y, p.size, 0, Math.PI * 2);
+        dctx.fill();
+      });
+      dctx.shadowBlur = 0;
+
+      // Raios (lightning) — dispara 1 novo a cada ~600ms, fade em 400ms
+      if (ts - lastBolt > 600 && Math.random() < 0.6) {
+        bolts.push(makeBolt(cx, cy, minR * 1.0));
+        lastBolt = ts;
+      }
+      bolts.forEach((b) => { b.life -= dt / 400; });
+      bolts = bolts.filter((b) => b.life > 0);
+
+      bolts.forEach((b) => {
+        dctx.beginPath();
+        const pts = b.points;
+        dctx.moveTo(pts[0].x, pts[0].y);
+        for (let i = 1; i < pts.length; i++) dctx.lineTo(pts[i].x, pts[i].y);
+        dctx.strokeStyle = `rgba(231, 168, 168, ${0.55 * b.life})`;
+        dctx.lineWidth = 1.4;
+        dctx.shadowColor = 'rgba(231, 168, 168, 0.9)';
+        dctx.shadowBlur = 12;
+        dctx.stroke();
+        // Glow extra
+        dctx.strokeStyle = `rgba(214, 180, 117, ${0.35 * b.life})`;
+        dctx.lineWidth = 0.6;
+        dctx.stroke();
+      });
+      dctx.shadowBlur = 0;
+
+      draf = requestAnimationFrame(drawDevice);
+    }
+
+    function startDeviceCanvas() {
+      if (document.hidden) { draf = null; return; }
+      if (draf == null) { dlastTs = 0; draf = requestAnimationFrame(drawDevice); }
+    }
+    function stopDeviceCanvas() {
+      if (draf != null) { cancelAnimationFrame(draf); draf = null; }
+    }
+
+    resizeDeviceCanvas();
+    startDeviceCanvas();
+    let dresizeTimer;
+    window.addEventListener('resize', () => {
+      clearTimeout(dresizeTimer);
+      dresizeTimer = setTimeout(resizeDeviceCanvas, 150);
+    });
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden) stopDeviceCanvas(); else startDeviceCanvas();
+    });
+  }
+
   /* ===== 2. HEADER SCROLL STATE ===== */
   const header = document.querySelector('.site-header');
   const onScroll = () => {
@@ -239,23 +387,5 @@
     updateSticky();
   }
 
-  /* ===== 8. GALLERY subtle parallax ===== */
-  const gItems = document.querySelectorAll('.g-item img');
-  if (gItems.length && window.matchMedia('(min-width: 700px)').matches) {
-    let ticking = false;
-    window.addEventListener('scroll', () => {
-      if (!ticking) {
-        window.requestAnimationFrame(() => {
-          gItems.forEach((img) => {
-            const rect = img.parentElement.getBoundingClientRect();
-            const center = rect.top + rect.height / 2 - window.innerHeight / 2;
-            const offset = Math.max(-30, Math.min(30, center * -0.05));
-            img.style.transform = `translateY(${offset}px) scale(1.06)`;
-          });
-          ticking = false;
-        });
-        ticking = true;
-      }
-    }, { passive: true });
-  }
+  /* ===== 8. (removido) — antiga parallax de galeria ===== */
 })();

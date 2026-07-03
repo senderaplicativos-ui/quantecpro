@@ -82,7 +82,7 @@
           </h1>
 
           <p class="hero-sub">
-            O <strong>QUANTEC<sup>®</sup> PRO</strong> identifica prioridades no seu campo informacional e emite frequências personalizadas, <strong>100% à distância, 24h por dia</strong>.
+            O <strong>QUANTEC<sup>®</sup> PRO</strong> identifica prioridades no seu campo informacional e emite frequências personalizadas via <em>entrelaçamento quântico</em> — <strong>100% à distância, 24h por dia</strong>.
           </p>
 
           <ul class="hero-proof">
@@ -106,17 +106,11 @@
           </p>
         </div>
 
-        <div class="hero-visual" aria-hidden="true">
-          <div class="diamond-frame">
-            <div class="diamond diamond-1"></div>
-            <div class="diamond diamond-2"></div>
-            <div class="diamond diamond-3"></div>
-            <div class="diamond-center">
-              <div class="orbit orbit-1"></div>
-              <div class="orbit orbit-2"></div>
-              <div class="orbit orbit-3"></div>
-              <div class="core"></div>
-            </div>
+        <div class="hero-visual">
+          <div class="device-frame">
+            <canvas id="device-canvas" aria-hidden="true"></canvas>
+            <img class="device-img" src="/public/images/device.png" alt="Dispositivo QUANTEC PRO com cristais de quartzo rosa e módulo central dourado" />
+            <span class="device-pulse" aria-hidden="true"></span>
           </div>
         </div>
       </div>
@@ -124,26 +118,6 @@
       <div class="hero-scroll-cue" aria-hidden="true">
         <span>role para descobrir</span>
         <span class="line"></span>
-      </div>
-    </section>
-
-    <!-- ============= 1.5 GALERIA ============= -->
-    <section class="gallery">
-      <div class="container">
-        <div class="gallery-grid">
-          <figure class="g-item g-1">
-            <img src="/public/images/device.jpeg" alt="Dispositivo QUANTEC PRO com cristais e módulo central dourado" loading="lazy"/>
-          </figure>
-          <figure class="g-item g-2">
-            <img src="/public/images/pessoa.jpg" alt="Mulher recebendo campo informacional ao ar livre" loading="lazy"/>
-          </figure>
-          <figure class="g-item g-3">
-            <img src="/public/images/pet.jpg" alt="Pet recebendo harmonização energética" loading="lazy"/>
-          </figure>
-          <figure class="g-item g-4">
-            <img src="/public/images/energia.jpg" alt="Silhueta humana preenchida por campo de energia dourado" loading="lazy"/>
-          </figure>
-        </div>
       </div>
     </section>
 
@@ -262,14 +236,14 @@
             <div class="tab-grid">
               <div class="tab-content">
                 <h3 class="tab-title">QUANTEC<sup>®</sup> Pessoa</h3>
-                <p class="tab-lead">Para quem quer alinhar a sua vida em todas as frentes: corpo, mente, propósito e campo.</p>
+                <p class="tab-lead">Alinha corpo, mente, propósito e campo. Em qualquer lugar do mundo — <em>sem você precisar estar presente</em>.</p>
                 <ul class="check-list">
-                  <li>Saúde e vitalidade</li>
-                  <li>Prosperidade financeira</li>
-                  <li>Relacionamentos</li>
-                  <li>Vida profissional</li>
-                  <li>Desenvolvimento pessoal</li>
-                  <li>Espiritualidade</li>
+                  <li>Saúde, vitalidade e equilíbrio emocional</li>
+                  <li>Prosperidade e clareza financeira</li>
+                  <li>Relacionamentos afetivos e familiares</li>
+                  <li>Vida profissional e propósito</li>
+                  <li>Desenvolvimento pessoal e espiritualidade</li>
+                  <li>Liberação de bloqueios e traumas</li>
                 </ul>
                 <a class="btn btn-primary" href="https://wa.me/558197720244?text=Ol%C3%A1!%20Quero%20contratar%20o%20Quantec%C2%AE%20PRO%20para%20PESSOA" target="_blank" rel="noopener">Quero para mim</a>
               </div>
@@ -283,15 +257,14 @@
             <div class="tab-grid">
               <div class="tab-content">
                 <h3 class="tab-title">QUANTEC<sup>®</sup> Empresa</h3>
-                <p class="tab-lead">Para quem quer destravar vendas, liderança, equipe e a energia do negócio.</p>
+                <p class="tab-lead">Harmoniza prosperidade, vendas, equipe e ambiente do CNPJ — com foco em fluxo, visibilidade e crescimento.</p>
                 <ul class="check-list">
-                  <li>Prosperidade e vendas</li>
-                  <li>Liderança</li>
-                  <li>Comunicação interna</li>
-                  <li>Produtividade</li>
-                  <li>Marketing e visibilidade</li>
-                  <li>Harmonização da equipe</li>
-                  <li>Proteção energética do negócio</li>
+                  <li>Prosperidade, fluxo financeiro e vendas</li>
+                  <li>Liderança, gestão e tomada de decisão</li>
+                  <li>Comunicação interna e clima organizacional</li>
+                  <li>Produtividade e foco em objetivos</li>
+                  <li>Marketing, visibilidade e fortalecimento da marca</li>
+                  <li>Harmonização e proteção energética do negócio</li>
                 </ul>
                 <a class="btn btn-primary" href="https://wa.me/558197720244?text=Ol%C3%A1!%20Quero%20contratar%20o%20Quantec%C2%AE%20PRO%20para%20EMPRESA" target="_blank" rel="noopener">Quero para meu negócio</a>
               </div>
@@ -305,14 +278,14 @@
             <div class="tab-grid">
               <div class="tab-content">
                 <h3 class="tab-title">QUANTEC<sup>®</sup> Pet</h3>
-                <p class="tab-lead">Para quem quer bem-estar, equilíbrio emocional e mais qualidade de vida para o seu animal.</p>
+                <p class="tab-lead">Equilíbrio emocional, comportamental e energético do seu animal — e também da casa e da relação tutor-pet.</p>
                 <ul class="check-list">
-                  <li>Ansiedade e medos</li>
-                  <li>Comportamento</li>
-                  <li>Vitalidade</li>
+                  <li>Ansiedade, medos, fobias e estresse</li>
+                  <li>Comportamento e socialização</li>
+                  <li>Vitalidade e bem-estar físico</li>
+                  <li>Adaptação a mudanças e novos ambientes</li>
                   <li>Convivência entre animais</li>
-                  <li>Vínculo tutor-pet</li>
-                  <li>Adaptação a mudanças</li>
+                  <li>Vínculo tutor-pet e ambiente da casa</li>
                 </ul>
                 <a class="btn btn-primary" href="https://wa.me/558197720244?text=Ol%C3%A1!%20Quero%20contratar%20o%20Quantec%C2%AE%20PRO%20para%20meu%20PET" target="_blank" rel="noopener">Quero para meu pet</a>
               </div>
@@ -380,11 +353,6 @@
               <h3 class="plan-name">1 Mês</h3>
               <p class="plan-sub">Para experimentar a tecnologia.</p>
             </header>
-            <div class="plan-price">
-              <span class="plan-currency">R$</span>
-              <span class="plan-amount">497</span>
-            </div>
-            <span class="plan-discount">—</span>
             <ul class="plan-features">
               <li><span class="check">✓</span> Programação personalizada</li>
               <li><span class="check">✓</span> Emissões 24h / a cada 3h</li>
@@ -392,7 +360,7 @@
               <li><span class="check">✓</span> Acompanhamento</li>
               <li><span class="check">✓</span> Atendimento individualizado</li>
             </ul>
-            <a class="btn btn-outline btn-block" href="https://wa.me/558197720244?text=Ol%C3%A1!%20Quero%20contratar%20o%20Quantec%C2%AE%20PRO%20-%20Plano%20de%201%20m%C3%AAs." target="_blank" rel="noopener">Começar agora</a>
+            <a class="btn btn-outline btn-block" href="https://wa.me/558197720244?text=Ol%C3%A1!%20Quero%20conhecer%20o%20plano%20de%201%20m%C3%AAs%20do%20Quantec%C2%AE%20PRO." target="_blank" rel="noopener">Consultar valores</a>
           </article>
 
           <!-- 2 MESES -->
@@ -401,11 +369,6 @@
               <h3 class="plan-name">2 Meses</h3>
               <p class="plan-sub">Para quem quer ir além da experimentação.</p>
             </header>
-            <div class="plan-price">
-              <span class="plan-currency">R$</span>
-              <span class="plan-amount">897</span>
-            </div>
-            <span class="plan-discount">10% off</span>
             <ul class="plan-features">
               <li><span class="check">✓</span> Programação personalizada</li>
               <li><span class="check">✓</span> Emissões 24h / a cada 3h</li>
@@ -413,7 +376,7 @@
               <li><span class="check">✓</span> Acompanhamento</li>
               <li><span class="check">✓</span> Atendimento individualizado</li>
             </ul>
-            <a class="btn btn-outline btn-block" href="https://wa.me/558197720244?text=Ol%C3%A1!%20Quero%20contratar%20o%20Quantec%C2%AE%20PRO%20-%20Plano%20de%202%20meses." target="_blank" rel="noopener">Começar agora</a>
+            <a class="btn btn-outline btn-block" href="https://wa.me/558197720244?text=Ol%C3%A1!%20Quero%20conhecer%20o%20plano%20de%202%20meses%20do%20Quantec%C2%AE%20PRO." target="_blank" rel="noopener">Consultar valores</a>
           </article>
 
           <!-- 3 MESES -->
@@ -423,26 +386,20 @@
               <h3 class="plan-name">3 Meses</h3>
               <p class="plan-sub">Para uma transformação profunda.</p>
             </header>
-            <div class="plan-price">
-              <span class="plan-currency">R$</span>
-              <span class="plan-amount">1.197</span>
-            </div>
-            <span class="plan-discount">20% off</span>
             <ul class="plan-features">
               <li><span class="check">✓</span> Programação personalizada</li>
               <li><span class="check">✓</span> Emissões 24h / a cada 3h</li>
               <li><span class="check">✓</span> Relatório completo</li>
               <li><span class="check">✓</span> Acompanhamento prioritário</li>
               <li><span class="check">✓</span> Atendimento individualizado</li>
-              <li><span class="check">✓</span> Bônus: replanejamento no 2º mês</li>
             </ul>
-            <a class="btn btn-primary btn-block" href="https://wa.me/558197720244?text=Ol%C3%A1!%20Quero%20contratar%20o%20Quantec%C2%AE%20PRO%20-%20Plano%20de%203%20meses%20(completo)." target="_blank" rel="noopener">Começar agora</a>
+            <a class="btn btn-primary btn-block" href="https://wa.me/558197720244?text=Ol%C3%A1!%20Quero%20conhecer%20o%20plano%20de%203%20meses%20do%20Quantec%C2%AE%20PRO." target="_blank" rel="noopener">Consultar valores</a>
           </article>
 
         </div>
 
         <p class="plans-note reveal">
-          Aceitamos Pix, cartão de crédito e boleto. <strong>Garantia de 7 dias</strong>.
+          Fale com a gente no WhatsApp para conhecer valores e condições.
         </p>
       </div>
     </section>

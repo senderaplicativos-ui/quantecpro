@@ -10,10 +10,9 @@ Landing page de alta conversão para o **QUANTEC® PRO**, tecnologia alemã de b
 
 - 🎨 **Identidade visual fiel**: navy profundo + champagne/gold, tipografia Cormorant Garamond + Inter
 - 🌊 **Background quântico animado**: ondas senoidais em canvas (gold + azul) com glow
-- 💎 **Diamante orbital** no hero, com 3 frames rotacionando e núcleo pulsante
+- 💎 **Dispositivo em destaque no hero**: imagem real do aparelho com campo quântico animado (canvas com raios, partículas orbitando e halo pulsante)
 - 📱 **Mobile-first**: botão WhatsApp sticky sempre visível no mobile
 - 🔁 **CTAs repetidos** em 3+ pontos da página
-- 📊 **Pricing com destaque**: card de 3 meses com badge "Mais escolhido"
 - 🪟 **Tabs interativas** (Pessoa / Empresa / Pet) com mídia e lista de benefícios
 - 👁️ **Scroll reveal** em todas as seções
 - 🔗 **Links WhatsApp pré-preenchidos** com mensagem dinâmica por plano
@@ -28,9 +27,9 @@ quantecpro/
 ├── index.html              # Página completa
 ├── package.json            # Apenas o script "start" (npx serve)
 ├── public/
-│   └── images/             # Imagens do produto + referências
+│   └── images/             # Imagens do produto + mídia das seções
 │       ├── hero.jpeg
-│       ├── device.jpeg
+│       ├── device.png      # dispositivo isolado (fundo removido via blend)
 │       ├── pessoa.jpg
 │       ├── pet.jpg
 │       ├── energia.jpg
@@ -38,9 +37,9 @@ quantecpro/
 │       └── waves.png
 ├── src/
 │   ├── css/styles.css      # Estilos completos
-│   └── js/main.js          # Canvas, tabs, scroll, sticky CTA
-└── referências/            # (pode ser removido no deploy)
-    └── prompt-lovable-quantec-pro.md
+│   └── js/main.js          # Canvas (waves + device), tabs, scroll, sticky CTA
+└── scripts/
+    └── capture-screenshots.js   # QA visual multi-viewport (Playwright)
 ```
 
 ---
@@ -85,8 +84,7 @@ O `vercel.json` define `buildCommand: null`, `outputDirectory: "."` e `framework
 
 | O quê | Onde |
 |---|---|
-| Preços dos planos | [index.html](index.html) — procure por `R$ 497`, `R$ 897`, `R$ 1.197` |
-| Descontos | [index.html](index.html) — `10% off` e `20% off` |
+| Mensagens dos CTAs WhatsApp | [index.html](index.html) — todas as URLs `wa.me/...` |
 | Número de WhatsApp | Busque por `558197720244` em [index.html](index.html) |
 | Cores | [src/css/styles.css](src/css/styles.css) — bloco `:root` no topo |
 | Textos | Todos no [index.html](index.html) |
@@ -97,17 +95,16 @@ O `vercel.json` define `buildCommand: null`, `outputDirectory: "."` e `framework
 ## 📋 Seções implementadas
 
 1. **Header fixo** com logo, nav e CTA WhatsApp
-2. **Hero** — headline, sub, prova rápida, CTA, diamante orbital animado
-3. **Galeria** — 4 imagens em grid assimétrico com hover zoom
-4. **O que é** — 3 cards (Análise, Programação, Emissão Remota)
-5. **Como funciona** — 4 passos numerados com linha conectora
-6. **Para quem é** — Tabs (Pessoa, Empresa, Pet) com imagem e bullets
-7. **O que você recebe** — 5 itens com check
-8. **Planos** — 1 / 2 / 3 meses (3 meses destacado com badge)
-9. **Disclaimer** — aviso sobre natureza complementar
-10. **CTA final** — seção com imagem de fundo
-11. **Footer** — assinatura da marca
-12. **Sticky WhatsApp** — botão fixo no mobile (some perto do footer)
+2. **Hero** — headline, sub, prova rápida, CTA + **dispositivo animado** (canvas com raios/partículas/halo)
+3. **O que é** — 3 cards (Análise, Programação, Emissão Remota)
+4. **Como funciona** — 4 passos numerados com linha conectora
+5. **Para quem é** — Tabs (Pessoa, Empresa, Pet) com imagem e bullets
+6. **O que você recebe** — 5 itens com check
+7. **Planos** — 1 / 2 / 3 meses (3 meses destacado com badge "Mais escolhido")
+8. **Disclaimer** — aviso sobre natureza complementar
+9. **CTA final** — seção com imagem de fundo
+10. **Footer** — assinatura da marca
+11. **Sticky WhatsApp** — botão fixo no mobile (some perto do footer)
 
 ---
 
