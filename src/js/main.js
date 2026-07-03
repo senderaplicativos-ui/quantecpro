@@ -388,4 +388,252 @@
   }
 
   /* ===== 8. (removido) — antiga parallax de galeria ===== */
+
+  /* ===== 9. PET INTERACTIVE CANVAS (partículas atraídas pelo cursor) ===== */
+  const pcanvas = document.getElementById('pet-canvas');
+  if (pcanvas) {
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const pctx = pcanvas.getContext('2d');
+    let pw = 0, ph = 0, pdpr = Math.min(window.devicePixelRatio || 1, 2);
+    let pparticles = [];
+    let praf = null;
+    let plastTs = 0;
+    const pointers = new Map(); // id -> {x, y, active, lastMove}
+    const COLORS_PET = [
+      [214, 180, 117], // gold
+      [232, 201, 138], // light gold
+      [255, 220, 150], // warm gold
+      [255, 180, 100], // amber
+    ];
+
+    function resizePetCanvas() {
+      const rect = pcanvas.parentElement.getBoundingClientRect();
+      pw = rect.width;
+      ph = rect.height;
+      pcanvas.width = pw * pdpr;
+      pcanvas.height = ph * pdpr;
+      pcanvas.style.width = pw + 'px';
+      pcanvas.style.height = ph + 'px';
+      pctx.setTransform(pdpr, 0, 0, pdpr, 0, 0);
+    }
+
+    function makeParticle(originX, originY) {
+      // Origem: dispersa em uma elipse ao redor do "ponto de luz" da imagem (topo-centro)
+      const baseX = pw * 0.55;
+      const baseY = ph * 0.12;
+      const spreadX = pw * 0.35;
+      const spreadY = ph * 0.25;
+      const x = originX ?? (baseX + (Math.random() - 0.5) * spreadX);
+      const y = originY ?? (baseY + (Math.random() - 0.5) * spreadY);
+      return {
+        x, y,
+        vx: (Math.random() - 0.5) * 0.3,
+        vy: (Math.random() - 0.5) * 0.3,
+        homeX: x,
+        homeY: y,
+        size: 0.8 + Math.random() * 2.2,
+        color: COLORS_PET[Math.floor(Math.random() * COLORS_PET.length)],
+        alpha: 0.4 + Math.random() * 0.5,
+        twinkleSpeed: 0.002 + Math.random() * 0.003,
+        twinklePhase: Math.random() * Math.PI * 2,
+        mass: 0.7 + Math.random() * 0.6,
+      };
+    }
+
+    function initParticles() {
+      pparticles = [];
+      // Densidade: 1 partícula por ~4500px²
+      const count = Math.min(120, Math.floor((pw * ph) / 4500));
+      for (let i = 0; i < count; i++) pparticles.push(makeParticle());
+    }
+
+    function spawnTrail(x, y) {
+      // Spawn rápido de partículas novas no ponto do cursor para feedback imediato
+      for (let i = 0; i < 3; i++) {
+        const p = makeParticle(x + (Math.random() - 0.5) * 20, y + (Math.random() - 0.5) * 20);
+        p.alpha = 0.7 + Math.random() * 0.3;
+        p.size = 1.2 + Math.random() * 1.8;
+        pparticles.push(p);
+      }
+      // Limite total
+      if (pparticles.length > 200) pparticles.splice(0, pparticles.length - 200);
+    }
+
+    function drawPet(ts) {
+      if (!pcanvas) return;
+      const dt = plastTs ? Math.min(ts - plastTs, 50) : 16;
+      plastTs = ts;
+
+      pctx.clearRect(0, 0, pw, ph);
+
+      // Atualiza e desenha partículas
+      for (let i = pparticles.length - 1; i >= 0; i--) {
+        const p = pparticles[i];
+
+        // Atração pelo(s) cursor(es)
+        let attractX = 0, attractY = 0, attractStrength = 0;
+        pointers.forEach((ptr) => {
+          if (!ptr.active) return;
+          const dx = ptr.x - p.x;
+          const dy = ptr.y - p.y;
+          const dist2 = dx * dx + dy * dy + 100; // evita divisão por 0
+          const dist = Math.sqrt(dist2);
+          // Força inversamente proporcional à distância
+          const force = 40000 / dist2;
+          attractX += (dx / dist) * force;
+          attractY += (dy / dist) * force;
+          attractStrength += force;
+        });
+
+        // "Home pull" — puxa de volta à origem (mantém a "fumaça" de luz próxima)
+        const hx = p.homeX - p.x;
+        const hy = p.homeY - p.y;
+        const homeForce = 0.0008;
+
+        // Atrito
+        const drag = 0.92;
+
+        p.vx = (p.vx + attractX * dt * 0.001 * p.mass + hx * homeForce) * drag;
+        p.vy = (p.vy + attractY * dt * 0.001 * p.mass + hy * homeForce) * drag;
+
+        p.x += p.vx * dt * 0.1;
+        p.y += p.vy * dt * 0.1;
+
+        // Twinkle
+        p.twinklePhase += p.twinkleSpeed * ts;
+        const twinkle = 0.6 + Math.sin(p.twinklePhase) * 0.4;
+        const c = p.color;
+
+        // Glow mais forte quando próxima do cursor
+        const proximity = Math.min(1, attractStrength * 0.02);
+        const finalAlpha = p.alpha * twinkle * (1 + proximity * 0.8);
+        const finalSize = p.size * (1 + proximity * 0.6);
+
+        // Glow
+        pctx.shadowColor = `rgba(${c[0]}, ${c[1]}, ${c[2]}, 0.9)`;
+        pctx.shadowBlur = 10 + proximity * 12;
+        pctx.fillStyle = `rgba(${c[0]}, ${c[1]}, ${c[2]}, ${finalAlpha})`;
+        pctx.beginPath();
+        pctx.arc(p.x, p.y, finalSize, 0, Math.PI * 2);
+        pctx.fill();
+
+        // Núcleo branco
+        pctx.shadowBlur = 0;
+        pctx.fillStyle = `rgba(255, 245, 220, ${finalAlpha * 0.6})`;
+        pctx.beginPath();
+        pctx.arc(p.x, p.y, finalSize * 0.4, 0, Math.PI * 2);
+        pctx.fill();
+
+        // Remove se sair muito do canvas
+        if (p.x < -20 || p.x > pw + 20 || p.y < -20 || p.y > ph + 20) {
+          pparticles.splice(i, 1);
+        }
+      }
+
+      pctx.shadowBlur = 0;
+      praf = requestAnimationFrame(drawPet);
+    }
+
+    function startPetCanvas() {
+      if (document.hidden) { praf = null; return; }
+      if (praf == null) { plastTs = 0; praf = requestAnimationFrame(drawPet); }
+    }
+    function stopPetCanvas() {
+      if (praf != null) { cancelAnimationFrame(praf); praf = null; }
+    }
+
+    function getCanvasPoint(e) {
+      const rect = pcanvas.getBoundingClientRect();
+      let cx, cy;
+      if (e.touches && e.touches.length) {
+        cx = e.touches[0].clientX;
+        cy = e.touches[0].clientY;
+      } else {
+        cx = e.clientX;
+        cy = e.clientY;
+      }
+      return {
+        x: cx - rect.left,
+        y: cy - rect.top,
+      };
+    }
+
+    // Eventos de mouse
+    pcanvas.addEventListener('mousemove', (e) => {
+      const pt = getCanvasPoint(e);
+      pointers.set('mouse', { ...pt, active: true });
+      if (Math.random() < 0.4) spawnTrail(pt.x, pt.y);
+    });
+    pcanvas.addEventListener('mouseleave', () => {
+      const ptr = pointers.get('mouse');
+      if (ptr) pointers.set('mouse', { ...ptr, active: false });
+    });
+    pcanvas.addEventListener('mouseenter', () => {
+      const ptr = pointers.get('mouse') || { x: pw/2, y: ph/2 };
+      pointers.set('mouse', { ...ptr, active: true });
+    });
+
+    // Eventos de touch (mobile)
+    pcanvas.addEventListener('touchstart', (e) => {
+      e.preventDefault();
+      const rect = pcanvas.getBoundingClientRect();
+      for (let i = 0; i < e.touches.length; i++) {
+        const t = e.touches[i];
+        const pt = { x: t.clientX - rect.left, y: t.clientY - rect.top, active: true };
+        pointers.set(t.identifier, pt);
+        spawnTrail(pt.x, pt.y);
+      }
+    }, { passive: false });
+    pcanvas.addEventListener('touchmove', (e) => {
+      e.preventDefault();
+      const rect = pcanvas.getBoundingClientRect();
+      for (let i = 0; i < e.touches.length; i++) {
+        const t = e.touches[i];
+        pointers.set(t.identifier, { x: t.clientX - rect.left, y: t.clientY - rect.top, active: true });
+        if (Math.random() < 0.5) spawnTrail(t.clientX - rect.left, t.clientY - rect.top);
+      }
+    }, { passive: false });
+    pcanvas.addEventListener('touchend', (e) => {
+      for (let i = 0; i < e.changedTouches.length; i++) {
+        const t = e.changedTouches[i];
+        const ptr = pointers.get(t.identifier);
+        if (ptr) pointers.set(t.identifier, { ...ptr, active: false });
+      }
+    });
+    pcanvas.addEventListener('touchcancel', () => {
+      pointers.forEach((v, k) => pointers.set(k, { ...v, active: false }));
+    });
+
+    // Pausa quando aba não visível
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden) stopPetCanvas();
+      else startPetCanvas();
+    });
+
+    // Pausa quando o painel Pet não está visível (economia)
+    const petPanel = document.querySelector('.tab-panel[data-panel="pet"]');
+    if (petPanel) {
+      const petObserver = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) startPetCanvas();
+          else stopPetCanvas();
+        });
+      }, { threshold: 0.05 });
+      petObserver.observe(petPanel);
+    }
+
+    // Resize
+    let pResizeTimer;
+    window.addEventListener('resize', () => {
+      clearTimeout(pResizeTimer);
+      pResizeTimer = setTimeout(() => {
+        resizePetCanvas();
+        initParticles();
+      }, 150);
+    });
+
+    resizePetCanvas();
+    initParticles();
+    if (!prefersReducedMotion) startPetCanvas();
+  }
 })();
