@@ -109,7 +109,19 @@
         <div class="hero-visual">
           <div class="device-frame">
             <canvas id="device-canvas" aria-hidden="true"></canvas>
-            <img class="device-img" src="/public/images/device.png" alt="Dispositivo QUANTEC PRO com cristais de quartzo rosa e módulo central dourado" />
+            <video
+              class="device-img device-video"
+              autoplay
+              loop
+              muted
+              playsinline
+              preload="metadata"
+              poster="/public/images/device.png"
+              aria-label="Dispositivo QUANTEC PRO com cristais de quartzo rosa e módulo central dourado">
+              <source src="/public/videos/device-animated.mp4" type="video/mp4" />
+              <source src="/public/videos/device-animated.webm" type="video/webm" />
+              <img src="/public/images/device.png" alt="Dispositivo QUANTEC PRO com cristais de quartzo rosa e módulo central dourado" />
+            </video>
             <span class="device-pulse" aria-hidden="true"></span>
           </div>
         </div>

@@ -488,6 +488,17 @@ ul, ol { list-style: none; padding: 0; margin: 0; }
     drop-shadow(0 0 60px rgba(231, 168, 168, 0.25));
   animation: deviceFloat 6s ease-in-out infinite;
 }
+/* Vídeo herda estilos da .device-img; ajustes específicos */
+.device-video {
+  display: block;
+  border-radius: 12px; /* só se o vídeo tiver fundo visível */
+}
+/* Fallback de prefers-reduced-motion: mantém o poster estático (img do device.png) */
+@media (prefers-reduced-motion: reduce) {
+  .device-video {
+    animation: none;
+  }
+}
 .device-pulse {
   position: absolute;
   left: 50%;
