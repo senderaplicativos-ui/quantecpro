@@ -1554,3 +1554,177 @@ main > section {
   .onda-bullet p { text-align: center; }
   .ondas-footnote { font-size: 0.95rem; }
 }
+
+/* =================================================================
+   SEÇÃO COMO O QUANTEC AGE — fluxo 3 etapas
+   ================================================================= */
+.section-age {
+  position: relative;
+  padding: var(--space-8) 0;
+}
+
+/* Fluxo principal */
+.age-flow {
+  display: grid;
+  grid-template-columns: 1fr auto 1.2fr auto 1fr;
+  gap: 1.25rem;
+  align-items: stretch;
+  margin: 4rem 0 3.5rem;
+}
+
+.age-step {
+  text-align: center;
+  padding: 2rem 1.25rem;
+  background: rgba(10, 18, 40, 0.55);
+  border: 1px solid var(--c-line);
+  border-radius: var(--r-md);
+  backdrop-filter: blur(8px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  transition: transform var(--t-base), border-color var(--t-base);
+}
+.age-step:hover {
+  transform: translateY(-3px);
+  border-color: var(--c-line-strong);
+}
+.age-step-tag {
+  display: inline-block;
+  font-family: var(--ff-sans);
+  font-size: 0.7rem;
+  letter-spacing: 0.18em;
+  color: var(--c-gold);
+  opacity: 0.7;
+  margin-top: 0.2rem;
+}
+.age-step h3 {
+  font-family: var(--ff-serif);
+  font-size: 1.05rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--c-cream);
+  margin: 0;
+  line-height: 1.2;
+}
+.age-step p {
+  font-size: 0.88rem;
+  line-height: 1.55;
+  color: var(--c-text-soft);
+  margin: 0;
+  max-width: 260px;
+}
+.age-step--center {
+  background: rgba(20, 37, 80, 0.55);
+}
+
+/* Ícones dentro dos steps */
+.age-step-icon {
+  width: 100px;
+  height: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(214, 180, 117, 0.18), rgba(214, 180, 117, 0.04) 60%, transparent 80%);
+  color: var(--c-cream);
+}
+.age-step-icon--device {
+  padding: 18px;
+}
+.age-step-icon--device img {
+  width: 100%;
+  height: auto;
+  mix-blend-mode: lighten;
+  filter: drop-shadow(0 0 12px rgba(214, 180, 117, 0.5));
+}
+.age-step-icon--waves {
+  width: 140px;
+  height: 60px;
+  background: transparent;
+}
+.age-step-icon--human {
+  width: 100px;
+  height: 100px;
+}
+
+/* Setas entre os steps */
+.age-arrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--c-gold);
+  opacity: 0.6;
+}
+
+/* Banner com imagem grande + nota */
+.age-banner {
+  position: relative;
+  margin: 3.5rem auto 0;
+  max-width: 980px;
+  border-radius: var(--r-lg);
+  overflow: hidden;
+  border: 1px solid var(--c-line);
+  background: rgba(5, 9, 20, 0.4);
+}
+.age-banner img {
+  width: 100%;
+  height: auto;
+  display: block;
+  max-height: 420px;
+  object-fit: cover;
+}
+.age-banner-note {
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+  padding: 1.5rem 1.75rem;
+  background: rgba(10, 18, 40, 0.92);
+  border-top: 1px solid var(--c-line);
+}
+.age-banner-ico {
+  font-size: 1.5rem;
+  color: var(--c-gold);
+  line-height: 1;
+  flex-shrink: 0;
+}
+.age-banner-note p {
+  margin: 0;
+  font-size: 0.98rem;
+  line-height: 1.65;
+  color: var(--c-text);
+}
+
+.age-footnote {
+  text-align: center;
+  margin: 3rem auto 0;
+  max-width: 720px;
+  font-family: var(--ff-serif);
+  font-style: italic;
+  font-size: 1rem;
+  color: var(--c-text);
+  line-height: 1.7;
+}
+
+/* Responsivo */
+@media (max-width: 980px) {
+  .age-flow {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+  .age-arrow {
+    transform: rotate(90deg);
+    height: 30px;
+  }
+  .age-banner img { max-height: 280px; }
+}
+@media (max-width: 620px) {
+  .section-age { padding: var(--space-7) 0; }
+  .age-step { padding: 1.5rem 1rem; }
+  .age-step-icon { width: 80px; height: 80px; }
+  .age-step-icon--device { padding: 14px; }
+  .age-step-icon--human { width: 80px; height: 80px; }
+  .age-step-icon--waves { width: 120px; height: 50px; }
+  .age-banner-note { flex-direction: column; gap: 0.6rem; padding: 1.25rem; }
+}
